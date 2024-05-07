@@ -47,13 +47,13 @@ RLS_LD = gcc
 # targets
 clean:
 	rm -f bin/*
-	rm -f obj/rls/*.o
-	rm -f obj/dbg/*.o
+	rm -f obj/rls/**.o
+	rm -f obj/dbg/**.o
 
-ifeq ($(SOURCES_INCLUDE_TYPE), include) 
+ifeq ($(SOURCES_INCLUDE_TYPE), include)
 SOURCES = $(patsubst %.c,src/%.c, $(SOURCES_INCLUDE))
 else
-SOURCES = $(filter-out $(patsubst %.c,src/%.c, $(SOURCES_EXCLUDE)), $(wildcard src/*.c))
+SOURCES = $(filter-out $(patsubst %.c,src/%.c, $(SOURCES_EXCLUDE)), $(shell find src/ -type f -name '*.c'))
 endif
 
 # debug mode make targets
