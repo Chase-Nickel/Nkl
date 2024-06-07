@@ -1,10 +1,80 @@
+/*
+ * void_generics/nkl_vector.h - Generic vector with void pointers
+ *
+ * This library provides generic vectors in C using void pointers.
+ *
+ * COMPILE TIME OPTIONS
+ *
+ *   #define NKL_FAST_MODE
+ *
+ *      This flag must be globally defined.
+ *
+ *      By default, vector functions will include index bound checking,
+ *      NULL checks, and will zero the struct upon deinit. If this flag is
+ *      defined, this functionality will not exist-- effectively an assertion
+ *      that you will pass valid inputs.
+ *
+ *  #define NKL_SHORT_NAMES
+ *
+ *      By default, exposed functions will be qualified with the "nkl_" prefix.
+ *      Define this flag if you wish to remove this prefix for shorter names.
+ *      May cause name conflicts
+ *
+ *  #define NKL_ALLOC(count, size)
+ *  #define NKL_REALLOC(count, size)
+ *  #define NKL_FREE(ptr)
+ *
+ *      By default, these are set to use the standard C functions `malloc`,
+ *      `realloc`, and `free`. You can override this by defining these with
+ *      the functions you wish to use.
+ *
+ * NOTES
+ *
+ *   - Allocation is by default only done upon item insertion. If an initial
+ *      capacity is specified, allocation will be done at init.
+ */
+
+
+/** DO NOT DEFINE THIS FLAG: IT IS FOR INTERNALS **/
+#ifdef NKL_COMPILE_TIME_OPTIONS
+
+/** INSERT ANY COMPILE TIME OPTIONS HERE **/
+
+
+
+/** ------------------------------------ **/
+#if (defined(NKL_ALLOC) && (!defined(NKL_REALLOC) || !defined(NKL_FREE))) ||   \
+    (defined(NKL_REALLOC) && (!defined(NKL_ALLOC) || !defined(NKL_FREE))) ||   \
+    (defined(NKL_FREE) && (!defined(NKL_ALLOC) || !defined(NKL_REALLOC)))
+#error                                                                         \
+    "You must define either all three of NKL_ALLOC, NKL_REALLOC, and NKL_FREE, or none of them."
+#endif
+#endif
+
+
 #ifndef NKL_VOID_GENERIC_VECTOR_H
 #define NKL_VOID_GENERIC_VECTOR_H 1
 
-/*
- * TODO:
- *   - Better docstrings
- */
+#if defined(NKL_SHORT_NAMES)
+
+typedef struct NklVector Vector;
+#define vec_init nkl_vec_init
+#define vec_deinit nkl_vec_deinit
+#define vec_append nkl_vec_append
+#define vec_prepend nkl_vec_prepend
+#define vec_index nkl_vec_index
+#define vec_index_ref nkl_vec_index_ref
+#define vec_index_alloc nkl_vec_index_alloc
+#define vec_pop nkl_vec_pop
+#define vec_pop_front nkl_vec_pop_front
+#define vec_pop_back nkl_vec_pop_back
+#define vec_pop_alloc nkl_vec_pop_alloc
+#define vec_pop_front_alloc nkl_vec_pop_front_alloc
+#define vec_pop_back_alloc nkl_vec_pop_back_alloc
+#define vec_remove nkl_vec_remove
+#define vec_insert nkl_vec_insert
+
+#endif
 
 #include <stdbool.h>
 #include <stddef.h>
