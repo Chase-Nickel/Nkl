@@ -12,28 +12,28 @@ str8 str8_dup(Arena *arena, str8 s);
 str8 str8_ndup(Arena *arena, str8 s, size_t n);
 
 /* Return a sub-string of `s` from `start` to `end` exclusive */
-str8 str8_sub(str8 s, size_t start, size_t end);
+str8 str8_substr(str8 s, size_t start, size_t end);
 
 /* Return an allocated sub-string of `s` from `start` to `end` exclusive */
-str8 str8_suba(Arena *arena, str8 s, size_t start, size_t end);
+str8 str8_substr_alloc(Arena *arena, str8 s, size_t start, size_t end);
 
 /* Compare `s1` and `s2` alphabetically.
  * Return 0 if `s1` and `s2` are alphabetically equal.
- * Return a negative value if `s1` is alphabetically less than `s2`.
- * Return a positive value if `s1` is alphabetically greater than `s2` */
-size_t str8_cmp(str8 s1, str8 s2);
+ * Return -1 if `s1` is alphabetically less than `s2`.
+ * Return 1 if `s1` is alphabetically greater than `s2` */
+int str8_cmp(str8 s1, str8 s2);
 
-/* Compare at most `n` bytes of `s1` and `s2`.
+/* Compare at most `n` bytes of `s1` and `s2` alphabetically.
  * Return 0 if `s1` and `s2` are alphabetically equal.
- * Return a negative value if `s1` is alphabetically less than `s2`.
- * Return a positive value if `s1` is alphabetically greater than `s2` */
-size_t str8_ncmp(str8 s1, str8 s2, size_t n);
+ * Return -1 if `s1` is alphabetically less than `s2`.
+ * Return 1 if `s1` is alphabetically greater than `s2` */
+int str8_ncmp(str8 s1, str8 s2, size_t n);
 
-/* Return a pointer to the first occurance of `c` in `string`.
- * Returns NULL if not in the string. */
-char *str8_chr(str8 s, char c);
+/* Return the index of the first occurrence of `c` in `string`.
+ * Returns the length of the string if the character does not appear. */
+size_t str8_find(str8 s, char c);
 
-/* Calculates the length (in bytes) of the initial segment of `s`
+/* Calculates the length of the initial segment of `s`
  * which consists entirely of bytes in `accept`. */
 size_t str8_spn(str8 s, str8 accept);
 
