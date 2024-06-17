@@ -13,15 +13,15 @@ struct Arena {
 };
 
 Arena arena_create(size_t size) {
-    Arena o = {0};
+    Arena a = {0};
     if (size == 0) {
         size = 65536;
     }
-    o.beg = malloc(size);
-    if (o.beg) {
-        o.size = size;
+    a.beg = malloc(size);
+    if (a.beg) {
+        a.size = size;
     }
-    return o;
+    return a;
 }
 void arena_free(Arena *a) { free(a->beg); }
 
@@ -34,9 +34,9 @@ void arena_free_s(Arena *a) {
 
 void arena_reset(Arena *a) { a->off = 0; }
 
-#define ARENA_OOM_HARDFAIL (1 << 0)
-#define ARENA_NO_ZERO (1 << 1)
-void *arena_malloc(Arena *a, ptrdiff_t size, ptrdiff_t align, uint32_t flags) {
+#define ARENA_OOM_HARDFAIL ((unsigned long)1 << (unsigned long)0)
+#define ARENA_NO_ZERO ((unsigned long)1 << (unsigned long)1)
+void *arena_malloc(Arena *a, size_t size, size_t align, unsigned long flags) {
     if (!a || (align & (align - 1)) != 0) {
         return NULL;
     }
@@ -51,13 +51,13 @@ void *arena_malloc(Arena *a, ptrdiff_t size, ptrdiff_t align, uint32_t flags) {
     void *o = a->beg + pad;
     a->off += padded_size;
     if (flags & ARENA_NO_ZERO) {
-        return memset(o, 0, padded_size);
-    }
 #ifdef NDEBUG
-    return memset(o, 0xCD, padded_size);
+        return memset(o, 0xCD, padded_size);
 #else
-    return o;
+        return o;
 #endif
+    }
+    return memset(o, 0, padded_size);
 }
 
 #define ALLOC(arena, count, type)                                              \
