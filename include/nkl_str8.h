@@ -1,7 +1,7 @@
 #ifndef NKL_STR8_H
 #define NKL_STR8_H 1
 
-#include <nkl_alloc.h>
+#include <nkl_arena.h>
 #include <nkl_str8_def.h>
 #include <stddef.h>
 

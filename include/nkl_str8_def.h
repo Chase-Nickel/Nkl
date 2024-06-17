@@ -9,11 +9,8 @@ struct str8 {
     size_t len;
 };
 
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ < 199901L
-str8 str8_make(const char *buf, size_t len);
-#define STR8(s) str8_make(s, sizeof s - 1)
-#else
-#define STR8(s) (str8){s, sizeof s - 1}
-#endif
+// Convert a string literal into str8
+#define STR8(s)                                                                \
+    (const str8) { s, sizeof s - 1 }
 
 #endif // !NKL_STR8_DEF_H
